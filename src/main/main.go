@@ -10,6 +10,7 @@ import (
 	"os"
 	"log"
 	"flag"
+	"strings"
 )
 
 var awsRegion string = "eu-west-1"
@@ -134,7 +135,7 @@ func createAwsUser(websiteName string, channel chan string) {
 	var policyName string = fmt.Sprintf("surreal-%s", websiteName)
 	var policyDocument string = fmt.Sprintf(
 		"{\"Version\": \"2012-10-17\",\"Statement\": [{\"Sid\": \"%s\",\"Effect\": \"Allow\",\"Action\": [ \"s3:*\"],\"Resource\": [\"arn:aws:s3:::%s\",\"arn:aws:s3:::%s/*\"]}]}",
-		sID, websiteName, websiteName)
+		strings.Replace(sID.String(), "-", "", -1), websiteName, websiteName)
 
 	putUserPolicyInput := &iam.PutUserPolicyInput{
 		UserName:       &userName,
